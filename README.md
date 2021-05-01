@@ -32,7 +32,7 @@ Application allows to merge selected datasets in Project.
 
 **Step 3**: Go to `Tasks` page and open application from there.
 
-<img src="https://i.imgur.com/U1kaHGb.png" width="600px"/>
+<img src="https://i.imgur.com/U1kaHGb.png"/>
 
 # How To Use
 
