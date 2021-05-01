@@ -8,7 +8,7 @@ app: sly.AppService = sly.AppService()
 
 TEAM_ID = int(os.environ['context.teamId'])
 WORKSPACE_ID = int(os.environ['context.workspaceId'])
-PROJECT_ID = int(os.environ['state.projectId'])
+PROJECT_ID = int(os.environ['modal.state.projectId'])
 
 global src_meta
 global src_project
