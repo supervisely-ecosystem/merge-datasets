@@ -9,7 +9,7 @@
   "main_script": "src/merge_datasets.py",
   "gui_template": "src/gui.html",
   "task_location": "workspace_tasks",
-  "icon": "https://i.imgur.com/dAeEkoO.png",
+  "icon": "https://i.imgur.com/DG3URUW.png",
   "icon_background": "#FFFFFF",
   "context_menu": {
     "target": ["images_project", "videos_project"]
