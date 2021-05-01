@@ -194,7 +194,7 @@ def merge_projects(api: sly.Api, task_id, context, state, app_logger):
                     api.app.set_fields(task_id, fields)
 
     app.show_modal_window(
-        f"{len(state['selectedDatasets'])} Datasets, from Project: {src_project.name}' has been successfully merged to Dataset: '{dst_dataset.name}' in Project: '{dst_project.name}'.", level="info")
+        f"{len(state['selectedDatasets'])} Datasets, from Project: '{src_project.name}' has been successfully merged to Dataset: '{dst_dataset.name}' in Project: '{dst_project.name}'.", level="info")
 
     fields = [
         {"field": "data.processing", "payload": "false"},
