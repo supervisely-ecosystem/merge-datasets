@@ -52,7 +52,7 @@ Application allows to merge selected datasets in Project.
 **❺** Press `Merge Projects` button. The progress bar will appear below. 
 When application will finish merging process the modal window will appear informing you that selected datasets have been merged.
    
-<img src="https://i.imgur.com/urRedWY.png" />
+<img src="https://i.imgur.com/urRedWY.png" width="400px/>
 
 **Step 2.** Stop application manually.
 
