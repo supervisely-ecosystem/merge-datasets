@@ -8,7 +8,7 @@ app: sly.AppService = sly.AppService()
 
 TEAM_ID = int(os.environ['context.teamId'])
 WORKSPACE_ID = int(os.environ['context.workspaceId'])
-PROJECT_ID = int(os.environ['modal.state.projectId'])
+PROJECT_ID = int(os.environ['state.projectId'])
 
 global src_meta
 global src_project
@@ -63,7 +63,6 @@ def merge_projects(api: sly.Api, task_id, context, state, app_logger):
     DST_DATASET_ID = state["dstDatasetId"]
     DST_DATASET_NAME = state["dstDatasetName"]
 
-    # CHECK IF MERGE DESTINATION EXISTS OR NOT
     dst_project = None
     if state["dstProjectMode"] == "existingProject":
         dst_project = api.project.get_info_by_id(DST_PROJECT_ID)
@@ -104,9 +103,7 @@ def merge_projects(api: sly.Api, task_id, context, state, app_logger):
         dst_dataset = api.dataset.create(dst_project.id, DST_DATASET_NAME)
         app_logger.info(f"Destination Project: name '{dst_project.name}', id:'{dst_project.id}' has been created.")
         app_logger.info(f"Destination Dataset: name '{dst_dataset.name}', id:'{dst_dataset.id}' has been created.")
-    # CHECK IF MERGE DESTINATION EXISTS OR NOT
 
-    # MERGING PROCESS
     app_logger.info(f"Merging Project: name: '{src_project.name}', id: '{src_project.id}', datasets to merge: {len(state['selectedDatasets'])}")
 
     total_items = 0
@@ -129,7 +126,6 @@ def merge_projects(api: sly.Api, task_id, context, state, app_logger):
     for dataset_name in state["selectedDatasets"]:
         dataset = src_datasets_by_name[dataset_name.lstrip('/')]
 
-        # IMAGES
         if src_project.type == str(sly.ProjectType.IMAGES):
             images = api.image.get_list(dataset.id)
             app_logger.info(f"Merging images and annotations from '{dataset.name}' dataset")
@@ -164,9 +160,7 @@ def merge_projects(api: sly.Api, task_id, context, state, app_logger):
                         {"field": "data.finished", "payload": "false"}
                     ]
                     api.app.set_fields(task_id, fields)
-        # IMAGES
 
-        # VIDEOS
         elif src_project.type == str(sly.ProjectType.VIDEOS):
             videos = api.video.get_list(dataset.id)
             app_logger.info(f"Merging videos and annotations from '{dataset.name}' dataset")
@@ -198,7 +192,7 @@ def merge_projects(api: sly.Api, task_id, context, state, app_logger):
                         {"field": "data.finished", "payload": "false"}
                     ]
                     api.app.set_fields(task_id, fields)
-        # VIDEOS
+
     app.show_modal_window(
         f"{len(state['selectedDatasets'])} Datasets, from Project: {src_project.name}' has been successfully merged to Dataset: '{dst_dataset.name}' in Project: '{dst_project.name}'.", level="info")
 
@@ -209,17 +203,12 @@ def merge_projects(api: sly.Api, task_id, context, state, app_logger):
     ]
     api.app.set_fields(task_id, fields)
 
-    # MERGING PROCESS
-
-    app.stop()
-
 
 def main():
     data = {}
     state = {}
 
-    ui.init_context(data, TEAM_ID, WORKSPACE_ID, PROJECT_ID)
-    #ui.init_connection(data, state)
+    ui.init_context(data, state, TEAM_ID, WORKSPACE_ID, PROJECT_ID)
     ui.init_options(data, state)
     ui.init_progress(data, state)
 

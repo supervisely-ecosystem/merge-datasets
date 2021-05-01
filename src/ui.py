@@ -2,10 +2,10 @@ import supervisely_lib as sly
 from functools import partial
 
 
-def init_context(data, team_id, workspace_id, project_id):
+def init_context(data, state, team_id, workspace_id, project_id):
     data["teamId"] = team_id
     data["workspaceId"] = workspace_id
-    data["projectId"] = project_id
+    state["projectId"] = project_id
 
 
 def init_options(data, state):
