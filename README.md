@@ -1,5 +1,5 @@
 <div align="center" markdown>
-<img src="https://i.imgur.com/R0d7RSW.png"/>
+<img src=""/>
 
 # Merge Projects
 
@@ -24,14 +24,16 @@ Application allows to merge selected datasets in Project.
 
 # How To Use
 
-**Step 1.** Add app to your team from [Ecosystem](https://ecosystem.supervise.ly/apps/export-to-pascal-voc) if it is not there.
+**Step 1.** Add app to your team from [Ecosystem](https://ecosystem.supervise.ly/apps/merge-project-datasets) if it is not there.
 
-**Step 2**: Open context menu of project -> `Run App` -> `Transform` -> `Resize images` 
-<img src="https://i.imgur.com/w5pztbj.png" height="400px"/>
+**Step 2**: Open context menu of project -> `Run App` -> `Merge Project Datasets`
+<img src="" height="400px"/>
 
 **Step 3.** Configure merging settings in UI 
    
-<img src="https://i.imgur.com/7znCxrC.png" height="400px"/>
+<img src="" />
 
 **Step 4.** Press `Start Merge` button. The progress bar will appear below. 
 When application will finish merging process the modal window will appear informing you that selected datasets have been merged.
+
+**Step 4.** Stop application manually.
