@@ -45,7 +45,7 @@ def init_src_project(api: sly.Api, task_id, context, state, app_logger):
         {"field": "state.srcDatasetList", "payload": datasets},
         {"field": "data.srcProjectType", "payload": src_project.type},
         {"field": "data.srcProjectName", "payload": src_project.name},
-        {"field": "data.projectId", "payload": src_project.id},
+        {"field": "state.projectId", "payload": src_project.id},
         {"field": "data.srcProjectPreviewUrl",
          "payload": api.image.preview_url(src_project.reference_image_url, 100, 100)},
         {"field": "data.finished", "payload": "false"}
