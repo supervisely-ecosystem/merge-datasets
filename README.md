@@ -37,11 +37,23 @@ Application allows to merge selected datasets in Project.
 # How To Use
 
 
-**Step 3.** Configure merging settings in UI 
-   
-<img src="" />
+**Step 1.** Configure merging settings in UI 
 
-**Step 4.** Press `Start Merge` button. The progress bar will appear below. 
+<img src="https://i.imgur.com/Z9VbZRT.png" />
+
+**❶** Choose resolve conflict option
+
+**❷** Select Destination Project
+
+**❸** Select Destination Dataset
+
+**❹** Select Dataset in Source Project that you want to merge
+
+**❺** Press `Merge Projects` button. The progress bar will appear below. 
 When application will finish merging process the modal window will appear informing you that selected datasets have been merged.
+   
+<img src="https://i.imgur.com/urRedWY.png" />
 
-**Step 4.** Stop application manually.
+**Step 2.** Stop application manually.
+
+<img src="https://i.imgur.com/36yQ86G.png" />
