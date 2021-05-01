@@ -28,7 +28,7 @@ Application allows to merge selected datasets in Project.
 
 **Step 2**: Open context menu of project -> `Run App` -> `Merge Project Datasets`
 
-<img src="https://i.imgur.com/6ecS2ec.png" width="600px"/>
+<img src="https://i.imgur.com/6ecS2ec.png"/>
 
 **Step 3**: Go to `Tasks` page and open application from there.
 
