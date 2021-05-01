@@ -20,7 +20,7 @@
 
 # Overview
 
-Application allows to merge selected datasets in Project. 
+Application allows to merge selected datasets in Project. Currently working only with `images` and `videos` Project types.
 
 # How To Run
 
