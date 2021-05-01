@@ -8,7 +8,7 @@ app: sly.AppService = sly.AppService()
 
 TEAM_ID = int(os.environ['context.teamId'])
 WORKSPACE_ID = int(os.environ['context.workspaceId'])
-PROJECT_ID = int(os.environ['state.projectId'])
+PROJECT_ID = int(os.environ['modal.state.slyProjectId'])
 
 global src_meta
 global src_project
@@ -45,7 +45,7 @@ def init_src_project(api: sly.Api, task_id, context, state, app_logger):
         {"field": "state.srcDatasetList", "payload": datasets},
         {"field": "data.srcProjectType", "payload": src_project.type},
         {"field": "data.srcProjectName", "payload": src_project.name},
-        {"field": "state.projectId", "payload": src_project.id},
+        {"field": "data.projectId", "payload": src_project.id},
         {"field": "data.srcProjectPreviewUrl",
          "payload": api.image.preview_url(src_project.reference_image_url, 100, 100)},
         {"field": "data.finished", "payload": "false"}
@@ -208,7 +208,7 @@ def main():
     data = {}
     state = {}
 
-    ui.init_context(data, state, TEAM_ID, WORKSPACE_ID, PROJECT_ID)
+    ui.init_context(data, TEAM_ID, WORKSPACE_ID, PROJECT_ID)
     ui.init_options(data, state)
     ui.init_progress(data, state)
 
