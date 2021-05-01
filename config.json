@@ -1,0 +1,17 @@
+{
+  "name": "Merge Datasets",
+  "type": "app",
+  "categories": [
+    "Data Management"
+  ],
+  "description": "Merge selected Datasets from one Project to another Project.",
+  "docker_image": "supervisely/base-py-sdk:6.1.72",
+  "main_script": "src/merge_datasets.py",
+  "gui_template": "src/gui.html",
+  "task_location": "workspace_tasks",
+  "icon": "https://i.imgur.com/dAeEkoO.png",
+  "icon_background": "#FFFFFF",
+  "context_menu": {
+    "target": ["images_project", "videos_project"]
+  }
+}
