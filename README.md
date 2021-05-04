@@ -1,5 +1,5 @@
 <div align="center" markdown>
-<img src=""/>
+<img src="https://i.imgur.com/QF7FTZn.png"/>
 
 # Merge Projects
 
@@ -20,20 +20,40 @@
 
 # Overview
 
-Application allows to merge selected datasets in Project. 
+Application allows to merge selected datasets in Project. Currently working only with `images` and `videos` project types.
 
-# How To Use
+# How To Run
 
 **Step 1.** Add app to your team from [Ecosystem](https://ecosystem.supervise.ly/apps/merge-project-datasets) if it is not there.
 
-**Step 2**: Open context menu of project -> `Run App` -> `Merge Project Datasets`
-<img src="" height="400px"/>
+**Step 2**: Open context menu of project -> `Run App` -> `Merge project datasets`
 
-**Step 3.** Configure merging settings in UI 
-   
-<img src="" />
+<img src="https://i.imgur.com/6ecS2ec.png"  width="600px"/>
 
-**Step 4.** Press `Start Merge` button. The progress bar will appear below. 
+**Step 3**: Go to `Tasks` page and open application from there.
+
+<img src="https://i.imgur.com/U1kaHGb.png"/>
+
+# How To Use
+
+
+**Step 1.** Configure merging settings in UI 
+
+<img src="https://i.imgur.com/Z9VbZRT.png" />
+
+**❶** Choose resolve conflict option
+
+**❷** Select Destination Project
+
+**❸** Select Destination Dataset
+
+**❹** Select Dataset in Source Project that you want to merge
+
+**❺** Press `Merge Projects` button. The progress bar will appear below. 
 When application will finish merging process the modal window will appear informing you that selected datasets have been merged.
+   
+<img src="https://i.imgur.com/Mk68jKn.png" width="600px"/>
 
-**Step 4.** Stop application manually.
+**Step 2.** Stop application manually.
+
+<img src="https://i.imgur.com/36yQ86G.png" />
