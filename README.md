@@ -1,5 +1,5 @@
 <div align="center" markdown>
-<img src="https://i.imgur.com/lKP8ywE.png"/>
+<img src="blob:https://imgur.com/8e68cc6a-d486-4cae-a949-0dc9a983aa53"/>
 
 # Merge Projects
 
@@ -20,13 +20,13 @@
 
 # Overview
 
-Application allows to merge selected datasets in Project. Currently working only with `images` and `videos` Project types.
+Application allows to merge selected datasets in Project. Currently working only with `images` and `videos` project types.
 
 # How To Run
 
 **Step 1.** Add app to your team from [Ecosystem](https://ecosystem.supervise.ly/apps/merge-project-datasets) if it is not there.
 
-**Step 2**: Open context menu of project -> `Run App` -> `Merge Project Datasets`
+**Step 2**: Open context menu of project -> `Run App` -> `Merge project datasets`
 
 <img src="https://i.imgur.com/6ecS2ec.png"  width="600px"/>
 
