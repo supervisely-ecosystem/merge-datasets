@@ -1,5 +1,5 @@
 <div align="center" markdown>
-<img src="blob:https://imgur.com/8e68cc6a-d486-4cae-a949-0dc9a983aa53"/>
+<img src="https://i.imgur.com/QF7FTZn.png"/>
 
 # Merge Projects
 
