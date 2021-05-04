@@ -69,10 +69,12 @@ def merge_projects(api: sly.Api, task_id, context, state, app_logger):
         dst_meta_json = api.project.get_meta(DST_PROJECT_ID)
         dst_meta = sly.ProjectMeta.from_json(dst_meta_json)
         try:
-            dst_meta.merge(src_meta)
-            app_logger.info(f"Destination Project: name'{dst_project.name}', id:'{dst_project.id}'.")
+            dst_meta = dst_meta.merge(src_meta)
+            api.project.update_meta(dst_project.id, dst_meta.to_json())
+            app_logger.info(f"Destination Project: name: '{dst_project.name}', id: '{dst_project.id}'.")
         except Exception as e:
-            app_logger.error("Source Project Meta is conflicting with Destination Project Meta. Please check that classes geometry matches in both projects.")
+            app_logger.error("Source Project Meta is conflicting with Destination Project Meta. "
+                             "Please, check that geometry of classes is the same in both projects.")
             raise e
 
         dst_dataset = None
@@ -81,30 +83,36 @@ def merge_projects(api: sly.Api, task_id, context, state, app_logger):
             app_logger.info(f"Destination Dataset: name'{dst_dataset.name}', id:'{dst_dataset.id}'.")
         elif state["dstDatasetMode"] == "newDataset":
             if api.dataset.exists(dst_project.id, DST_DATASET_NAME):
-                app_logger.info(
-                    f"Dataset with the given name '{DST_DATASET_NAME}' already exists. Dataset: '{api.dataset.get_free_name(dst_project.id, DST_DATASET_NAME)}' will be created.")
+                old_dst_dataset_name = DST_DATASET_NAME
                 DST_DATASET_NAME = api.dataset.get_free_name(dst_project.id, DST_DATASET_NAME)
+                app_logger.info(
+                    f"Dataset with the given name '{old_dst_dataset_name}' already exists. Dataset: '{DST_DATASET_NAME}' will be created.")
 
             dst_dataset = api.dataset.create(dst_project.id, DST_DATASET_NAME)
             app_logger.info(f"Destination Dataset: name'{dst_dataset.name}', id:'{dst_dataset.id}' has been created.")
 
     elif state["dstProjectMode"] == "newProject":
         if api.project.exists(WORKSPACE_ID, DST_PROJECT_NAME):
-            app_logger.info(
-                f"Project with the given name '{DST_PROJECT_NAME}' already exists. Project: `{api.project.get_free_name(WORKSPACE_ID, DST_PROJECT_NAME)}` will be created.")
+            old_dst_project_name = DST_PROJECT_NAME
             DST_PROJECT_NAME = api.project.get_free_name(WORKSPACE_ID, DST_PROJECT_NAME)
+            app_logger.info(
+                f"Project with the given name '{old_dst_project_name}' already exists. Project: `{DST_PROJECT_NAME}` will be created.")
 
         dst_project = api.project.create(WORKSPACE_ID, DST_PROJECT_NAME, type=src_project.type)
 
         dst_meta = sly.ProjectMeta()
         dst_meta = dst_meta.merge(src_meta)
-        api.project.update_meta(dst_project.id, dst_meta.to_json())
+        api.project.update_meta(dst_project.id, src_meta.to_json())
 
         dst_dataset = api.dataset.create(dst_project.id, DST_DATASET_NAME)
         app_logger.info(f"Destination Project: name '{dst_project.name}', id:'{dst_project.id}' has been created.")
         app_logger.info(f"Destination Dataset: name '{dst_dataset.name}', id:'{dst_dataset.id}' has been created.")
 
-    app_logger.info(f"Merging Project: name: '{src_project.name}', id: '{src_project.id}', datasets to merge: {len(state['selectedDatasets'])}")
+    app_logger.info("Merging info", extra={
+        "project name": src_project.name,
+        "project id": src_project.id,
+        "datasets to merge": state['selectedDatasets']
+    })
 
     total_items = 0
     for dataset_name in state["selectedDatasets"]:
@@ -122,10 +130,10 @@ def merge_projects(api: sly.Api, task_id, context, state, app_logger):
     api.app.set_fields(task_id, fields)
 
     uploaded_items = []
+
     cur_item_count = 0
     for dataset_name in state["selectedDatasets"]:
         dataset = src_datasets_by_name[dataset_name.lstrip('/')]
-
         if src_project.type == str(sly.ProjectType.IMAGES):
             images = api.image.get_list(dataset.id)
             app_logger.info(f"Merging images and annotations from '{dataset.name}' dataset")
@@ -134,32 +142,43 @@ def merge_projects(api: sly.Api, task_id, context, state, app_logger):
                 ds_image_names = [ds_image_info.name for ds_image_info in batch]
                 ann_infos = api.annotation.download_batch(dataset.id, ds_image_ids)
                 ann_jsons = [ann_info.annotation for ann_info in ann_infos]
-                for ds_image_id, ds_image_name, ann_info, ann_json in zip(ds_image_ids, ds_image_names, ann_infos,
-                                                                          ann_jsons):
 
-                    if ds_image_name in uploaded_items and state["handleItemNameConflicts"] == "True":
-                        ds_image_name = generate_free_name(uploaded_items, ds_image_name, with_ext=False)
-                    elif ds_image_name in uploaded_items and state["handleItemNameConflicts"] == "False":
-                        app_logger.info(f"Image with name: `{ds_image_name}` is already exists in dataset: `{dataset.name}` and will be ignored.")
+                indexes = []
+                for i, ds_image_name in enumerate(ds_image_names):
+                    if ds_image_name in uploaded_items and state["nameConflicts"] == "rename":
+                        ds_image_names[i] = generate_free_name(uploaded_items, ds_image_name, True)
+                    elif ds_image_name in uploaded_items and state["nameConflicts"] == "ignore":
+                        app_logger.info(
+                            f"Image with name: `{ds_image_name}` already exists in dataset: `{dataset.name}` "
+                            f"and will be ignored.")
+                        indexes.append(i)
                         continue
 
+                    uploaded_items.append(ds_image_names[i])
 
-                    dst_image = api.image.upload_id(dst_dataset.id, ds_image_name, ds_image_id)
-                    api.annotation.upload_json(dst_image.id, ann_json)
-                    uploaded_items.append(dst_image.name)
+                if len(indexes) > 0:
+                    for index in sorted(indexes, reverse=True):
+                        del ds_image_names[index]
+                        del ds_image_ids[index]
+                        del ann_jsons[index]
 
-                    progress_items_cb = ui.get_progress_cb(api, task_id, 1, message=f"{ds_image_name}",
-                                                           total=total_items, func=ui.set_progress)
-                    cur_item_count = cur_item_count + 1
-                    fields = [
-                        {"field": "data.progressName", "payload": "Items Merged"},
-                        {"field": "data.currentProgressLabel", "payload": cur_item_count},
-                        {"field": "data.totalProgressLabel", "payload": total_items},
-                        {"field": "data.currentProgress", "payload": cur_item_count},
-                        {"field": "data.totalProgress", "payload": total_items},
-                        {"field": "data.finished", "payload": "false"}
-                    ]
-                    api.app.set_fields(task_id, fields)
+                if len(ds_image_names) == 0:
+                    continue
+
+                dst_images = api.image.upload_ids(dst_dataset.id, ds_image_names, ds_image_ids)
+                dst_image_ids = [dst_img_info.id for dst_img_info in dst_images]
+                api.annotation.upload_jsons(dst_image_ids, ann_jsons)
+
+                cur_item_count = cur_item_count + len(ds_image_ids)
+                fields = [
+                    {"field": "data.progressName", "payload": "Items Merged"},
+                    {"field": "data.currentProgressLabel", "payload": cur_item_count},
+                    {"field": "data.totalProgressLabel", "payload": total_items},
+                    {"field": "data.currentProgress", "payload": cur_item_count},
+                    {"field": "data.totalProgress", "payload": total_items},
+                    {"field": "data.finished", "payload": "false"}
+                ]
+                api.app.set_fields(task_id, fields)
 
         elif src_project.type == str(sly.ProjectType.VIDEOS):
             videos = api.video.get_list(dataset.id)
@@ -171,10 +190,10 @@ def merge_projects(api: sly.Api, task_id, context, state, app_logger):
                 for ds_video_id, ds_video_name, ds_video_hash in zip(ds_video_ids, ds_video_names, ds_video_hashes):
                     ann_info = api.video.annotation.download(ds_video_id)
                     ann = sly.VideoAnnotation.from_json(ann_info, dst_meta, KeyIdMap())
-                    if ds_video_name in uploaded_items and state["handleItemNameConflicts"] is True:
+                    if ds_video_name in uploaded_items and state["nameConflicts"] == "rename":
                         ds_video_name = generate_free_name(uploaded_items, ds_video_name, with_ext=True)
-                    elif ds_video_name in uploaded_items and state["handleItemNameConflicts"] is False:
-                        app_logger.info(f"Video with name: '{ds_video_name}' is already exists in dataset: '{dataset.name}' and will be ignored.")
+                    elif ds_video_name in uploaded_items and state["nameConflicts"] == "ignore":
+                        app_logger.info(f"Video with name: '{ds_video_name}' already exists in dataset: '{dataset.name}' and will be ignored.")
                         continue
 
                     dst_video = api.video.upload_hash(dst_dataset.id, ds_video_name, ds_video_hash)
@@ -193,8 +212,16 @@ def merge_projects(api: sly.Api, task_id, context, state, app_logger):
                     ]
                     api.app.set_fields(task_id, fields)
 
-    app.show_modal_window(
-        f"{len(state['selectedDatasets'])} Datasets, from Project: {src_project.name}' has been successfully merged to Dataset: '{dst_dataset.name}' in Project: '{dst_project.name}'.", level="info")
+    if state["nameConflicts"] == "ignore":
+        app.show_modal_window(f"{len(state['selectedDatasets'])} datasets, from Project: '{src_project.name}' "
+                              f"has been successfully merged to dataset: '{dst_dataset.name}', in Project: '{dst_project.name}' "
+                              f"Items ignored: {total_items - cur_item_count}"
+                              , level="info")
+    else:
+        app.show_modal_window(f"Datasets: `{len(state['selectedDatasets'])}`, from Project: '{src_project.name}' "
+                              f"has been successfully merged to Dataset: '{dst_dataset.name}', in Project: '{dst_project.name}'"
+                              , level="info")
+
 
     fields = [
         {"field": "data.processing", "payload": "false"},

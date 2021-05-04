@@ -7,20 +7,20 @@
 
     <sly-card class="mt10"
               title="Merge Settings"
-              subtitle="Configure Data merging and destination Project">
+              subtitle="Configure data merging and destination project">
         <sly-field title="How do you want to solve item names conflicts?"
-                   description="Choose whether Project items with the same names in Datasets should be ignored or not">
+                   description="Choose whether project items with the same names in datasets should be ignored or not">
             <div class="fflex" style="flex-direction: column; align-items: flex-start">
                 <el-radio class="radio"
-                          v-model="state.handleItemNameConflicts"
-                          label="False">
-                    Ignore items with the same names in Datasets
+                          v-model="state.nameConflicts"
+                          label="ignore">
+                    Ignore items with the same names in dataset
                 </el-radio>
                 <el-radio class="radio mt5"
-                          v-model="state.handleItemNameConflicts"
-                          label="True"
+                          v-model="state.nameConflicts"
+                          label="rename"
                           style="margin-left: 0;">
-                    Assign a new names to items with the same names in Datasets
+                    Assign a new names to items with the same names in dataset
                 </el-radio>
                 <div class="mt5" style="color: #5a6772">
                     <i>Example: IMG_555.jpeg -> IMG_555_01.jpeg</i>
@@ -28,7 +28,7 @@
             </div>
         </sly-field>
         <sly-field title="Destination Project"
-                   description="Define destination Project">
+                   description="Define destination project">
             <div class="fflex">
 
                 <el-radio class="radio"
@@ -47,7 +47,7 @@
             </div>
             <div class="mt5">
                 <div v-if="state.dstProjectMode === 'newProject'">
-                    <el-input placeholder="Please input Project name" v-model="state.dstProjectName"></el-input>
+                    <el-input placeholder="Please input project name" v-model="state.dstProjectName"></el-input>
                     <div class="mt5" style="color: #5a6772">
                         <i>If Project with the same name already exists, a new name will be generated automatically</i>
                     </div>
@@ -69,21 +69,21 @@
             </div>
         </sly-field>
         <sly-field title="Destination Dataset"
-                   description="Define destination Dataset">
+                   description="Define destination dataset">
             <div class="fflex">
                 <el-radio class="radio" v-model="state.dstDatasetMode" label="newDataset">Create new Dataset</el-radio>
                 <el-radio class="radio"
                           v-model="state.dstDatasetMode"
                           label="existingDataset"
                           :disabled="state.dstProjectMode === 'newProject'">
-                    Add to existing Dataset
+                    Add to existing dataset
                 </el-radio>
             </div>
             <div class="mt5">
                 <div v-if="state.dstDatasetMode === 'newDataset'">
-                    <el-input placeholder="Please input Dataset name" v-model="state.dstDatasetName"></el-input>
+                    <el-input placeholder="Please input dataset name" v-model="state.dstDatasetName"></el-input>
                     <div class="mt5" style="color: #5a6772">
-                        <i>If Dataset with the same name already exists, a new name will be generated automatically</i>
+                        <i>If dataset with the same name already exists, a new name will be generated automatically</i>
                     </div>
                 </div>
                 <div v-if="state.dstDatasetMode === 'existingDataset'">

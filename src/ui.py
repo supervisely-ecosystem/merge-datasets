@@ -17,7 +17,7 @@ def init_options(data, state):
     state["dstDatasetName"] = "my_dataset"
     state["dstDatasetId"] = None
 
-    state["handleItemNameConflicts"] = "False"
+    state["nameConflicts"] = "ignore"
     state["srcDatasetList"] = []
     state["selectedDatasets"] = []
 
