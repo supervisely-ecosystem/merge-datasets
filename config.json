@@ -1,11 +1,11 @@
 {
-  "name": "Merge Project Datasets",
+  "name": "Merge project datasets",
   "type": "app",
   "categories": [
     "Data Management"
   ],
-  "description": "Merge selected Datasets in Project into single Dataset.",
-  "docker_image": "supervisely/base-py-sdk:6.1.72",
+  "description": "Merge selected datasets into a single dataset.",
+  "docker_image": "supervisely/base-py-sdk:6.1.73",
   "main_script": "src/merge_datasets.py",
   "gui_template": "src/gui.html",
   "task_location": "workspace_tasks",
