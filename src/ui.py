@@ -77,3 +77,27 @@ def get_progress_cb(api, task_id, index, message, total, is_size=False, func=upd
     progress_cb = partial(func, index=index, api=api, task_id=task_id, progress=progress)
     progress_cb(0)
     return progress_cb
+
+
+def set_init_project_fields(api, task_id, datasets, src_proj_type, src_proj_name, src_proj_id, src_proj_preview, is_finished):
+    fields = [
+        {"field": "state.srcDatasetList", "payload": datasets},
+        {"field": "data.srcProjectType", "payload": src_proj_type},
+        {"field": "data.srcProjectName", "payload": src_proj_name},
+        {"field": "data.projectId", "payload": src_proj_id},
+        {"field": "data.srcProjectPreviewUrl", "payload": src_proj_preview},
+        {"field": "data.finished", "payload": is_finished}
+    ]
+    api.app.set_fields(task_id, fields)
+
+
+def item_progress(api, task_id, message, cur_item_count, total_items, is_finished):
+    fields = [
+        {"field": "data.progressName", "payload": "Items Merged"},
+        {"field": "data.currentProgressLabel", "payload": cur_item_count},
+        {"field": "data.totalProgressLabel", "payload": total_items},
+        {"field": "data.currentProgress", "payload": cur_item_count},
+        {"field": "data.totalProgress", "payload": total_items},
+        {"field": "data.finished", "payload": "false"}
+    ]
+    api.app.set_fields(task_id, fields)
