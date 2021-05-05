@@ -39,7 +39,7 @@ Application allows to merge selected datasets in Project. Currently working only
 
 **Step 1.** Configure merging settings in UI 
 
-<img src="https://i.imgur.com/Z9VbZRT.png" />
+<img src="https://i.imgur.com/YKSO7bZ.png" />
 
 **❶** Choose resolve conflict option
 
