@@ -104,7 +104,7 @@
                     <sly-icon slot="icon" :options="{ imageUrl: `${data.srcProjectPreviewUrl}` }"/>
                 </sly-field>
             <h3>
-                Select which Datasets you want to merge:
+                Select which datasets you want to merge:
             </h3>
             <div class="mt5">
                 <sly-file-viewer :list="state.srcDatasetList" v-model="state.selectedDatasets"/>
@@ -123,7 +123,7 @@
                            (state.dstDatasetMode === 'existingDataset' && !state.selectedDatasetName) ||
                            (data.finished === 'true')"
                 @click="data.processing = true; command('merge_projects')">
-            <i class="zmdi zmdi-play mr5"></i> Merge Projects
+            <i class="zmdi zmdi-play mr5"></i> Merge Datasets
         </el-button>
         <div class="mt5" v-if="state.dstProjectMode === 'newProject' && state.dstProjectName.length === 0" style="color: red">
             Please, define the name of a new Project
