@@ -89,7 +89,7 @@
                 <div v-if="state.dstDatasetMode === 'existingDataset'">
                     <sly-select-dataset
                             :project-id="state.dstProjectId"
-                            :datasets.sync="state.dstDatasetId"
+                            :datasets.sync="state.selectedDatasetName"
                             :options="{showLabel: false}"
                     >
                     </sly-select-dataset>
@@ -120,7 +120,7 @@
                            (state.dstProjectMode === 'newProject' && state.dstProjectName.length === 0) ||
                            (state.dstProjectMode === 'existingProject' && !state.dstProjectId) ||
                            (state.dstDatasetMode === 'newDataset' && state.dstDatasetName.length === 0) ||
-                           (state.dstDatasetMode === 'existingDataset' && !state.dstDatasetId) ||
+                           (state.dstDatasetMode === 'existingDataset' && !state.selectedDatasetName) ||
                            (data.finished === 'true')"
                 @click="data.processing = true; command('merge_projects')">
             <i class="zmdi zmdi-play mr5"></i> Merge Projects
@@ -134,7 +134,7 @@
         <div class="mt5" v-if="state.dstDatasetMode === 'newDataset' && state.dstDatasetName.length === 0" style="color: red">
             Please, define the name of a new Dataset
         </div>
-        <div class="mt5" v-if="state.dstDatasetMode === 'existingDataset' && !state.dstDatasetId" style="color: red">
+        <div class="mt5" v-if="state.dstDatasetMode === 'existingDataset' && !state.selectedDatasetName" style="color: red">
             Please, select one of the existing Datasets
         </div>
 

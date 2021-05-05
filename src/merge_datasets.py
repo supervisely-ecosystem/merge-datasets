@@ -60,7 +60,7 @@ def merge_projects(api: sly.Api, task_id, context, state, app_logger):
     DST_PROJECT_ID = state["dstProjectId"]
     DST_PROJECT_NAME = state["dstProjectName"]
 
-    DST_DATASET_ID = state["dstDatasetId"]
+    DST_SELECTED_DATASET = state["selectedDatasetName"]
     DST_DATASET_NAME = state["dstDatasetName"]
 
     dst_project = None
@@ -79,7 +79,7 @@ def merge_projects(api: sly.Api, task_id, context, state, app_logger):
 
         dst_dataset = None
         if state["dstDatasetMode"] == "existingDataset":
-            dst_dataset = api.dataset.get_info_by_id(DST_DATASET_ID)
+            dst_dataset = api.dataset.get_info_by_name(dst_project.id, DST_SELECTED_DATASET)
             app_logger.info(f"Destination Dataset: name'{dst_dataset.name}', id:'{dst_dataset.id}'.")
         elif state["dstDatasetMode"] == "newDataset":
             if api.dataset.exists(dst_project.id, DST_DATASET_NAME):
@@ -114,10 +114,22 @@ def merge_projects(api: sly.Api, task_id, context, state, app_logger):
         "datasets to merge": state['selectedDatasets']
     })
 
+
     total_items = 0
     for dataset_name in state["selectedDatasets"]:
         dataset = src_datasets_by_name[dataset_name.lstrip('/')]
         total_items += dataset.items_count
+
+    existing_items = []
+
+    if src_project.type == str(sly.ProjectType.IMAGES):
+        existing_images = api.image.get_list(dst_dataset.id)
+        for image in existing_images:
+            existing_items.append(image.name)
+    elif src_project.type == str(sly.ProjectType.VIDEOS):
+        existing_videos = api.video.get_list(dst_dataset.id)
+        for video in existing_videos:
+            existing_items.append(video.name)
 
     fields = [
         {"field": "data.progressName", "payload": None},
@@ -128,8 +140,6 @@ def merge_projects(api: sly.Api, task_id, context, state, app_logger):
         {"field": "data.finished", "payload": "false"}
     ]
     api.app.set_fields(task_id, fields)
-
-    uploaded_items = []
 
     cur_item_count = 0
     for dataset_name in state["selectedDatasets"]:
@@ -145,16 +155,16 @@ def merge_projects(api: sly.Api, task_id, context, state, app_logger):
 
                 indexes = []
                 for i, ds_image_name in enumerate(ds_image_names):
-                    if ds_image_name in uploaded_items and state["nameConflicts"] == "rename":
-                        ds_image_names[i] = generate_free_name(uploaded_items, ds_image_name, True)
-                    elif ds_image_name in uploaded_items and state["nameConflicts"] == "ignore":
+                    if ds_image_name in existing_items and state["nameConflicts"] == "rename":
+                        ds_image_names[i] = generate_free_name(existing_items, ds_image_name, True)
+                    elif ds_image_name in existing_items and state["nameConflicts"] == "ignore":
                         app_logger.info(
                             f"Image with name: `{ds_image_name}` already exists in dataset: `{dataset.name}` "
                             f"and will be ignored.")
                         indexes.append(i)
                         continue
 
-                    uploaded_items.append(ds_image_names[i])
+                    existing_items.append(ds_image_names[i])
 
                 if len(indexes) > 0:
                     for index in sorted(indexes, reverse=True):
@@ -190,14 +200,15 @@ def merge_projects(api: sly.Api, task_id, context, state, app_logger):
                 for ds_video_id, ds_video_name, ds_video_hash in zip(ds_video_ids, ds_video_names, ds_video_hashes):
                     ann_info = api.video.annotation.download(ds_video_id)
                     ann = sly.VideoAnnotation.from_json(ann_info, dst_meta, KeyIdMap())
-                    if ds_video_name in uploaded_items and state["nameConflicts"] == "rename":
-                        ds_video_name = generate_free_name(uploaded_items, ds_video_name, with_ext=True)
-                    elif ds_video_name in uploaded_items and state["nameConflicts"] == "ignore":
+                    if ds_video_name in existing_items and state["nameConflicts"] == "rename":
+                        ds_video_name = generate_free_name(existing_items, ds_video_name, with_ext=True)
+                    elif ds_video_name in existing_items and state["nameConflicts"] == "ignore":
                         app_logger.info(f"Video with name: '{ds_video_name}' already exists in dataset: '{dataset.name}' and will be ignored.")
                         continue
 
                     dst_video = api.video.upload_hash(dst_dataset.id, ds_video_name, ds_video_hash)
                     api.video.annotation.append(dst_video.id, ann)
+                    existing_items.append(ds_video_name)
 
                     progress_items_cb = ui.get_progress_cb(api, task_id, 1, message=f"{ds_video_name}",
                                                            total=total_items, func=ui.set_progress)
