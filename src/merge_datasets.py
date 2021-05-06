@@ -65,10 +65,9 @@ def merge_projects(api: sly.Api, task_id, context, state, app_logger):
             api.project.update_meta(dst_project.id, dst_meta.to_json())
             app_logger.info(f"Destination Project: name: '{dst_project.name}', id: '{dst_project.id}'.")
         except Exception as e:
-            app_logger.error("Source Project Meta is conflicting with Destination Project Meta. "
-                             "Please, check that geometry of classes is the same in both projects.")
-            app.show_modal_window("Error during merge, values are different. Source Project Meta is conflicting with Destination Project Meta. "
-                             "Please, check that geometry of classes and tags are the same in both projects. Please stop and re-run application manually.", level="error")
+            app.show_modal_window("Error during merge, source project meta has conflics with destination project meta. "
+                                  "Please check shapes of classes / types of tags with the same names or select another destination. "
+                                  "Please stop and re-run application manually.", level="error")
             raise e
 
         dst_dataset = None
