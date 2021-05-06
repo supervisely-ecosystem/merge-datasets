@@ -17,7 +17,7 @@ def init_options(data, state):
     state["dstDatasetName"] = "my_dataset"
     state["selectedDatasetName"] = None
 
-    state["nameConflicts"] = "ignore"
+    state["nameConflicts"] = "rename"
     state["srcDatasetList"] = []
     state["selectedDatasets"] = []
 
@@ -36,14 +36,15 @@ def init_progress(data, state):
     data["totalProgress"] = 0
 
 
-def init_project_fields(api, task_id, datasets, src_project, src_project_preview, is_finished):
+def init_project_fields(api, task_id, datasets, src_project):
     fields = [
         {"field": "state.srcDatasetList", "payload": datasets},
         {"field": "data.srcProjectType", "payload": src_project.type},
         {"field": "data.srcProjectName", "payload": src_project.name},
         {"field": "data.projectId", "payload": src_project.id},
-        {"field": "data.srcProjectPreviewUrl", "payload": src_project_preview},
-        {"field": "data.finished", "payload": is_finished}
+        {"field": "data.srcProjectPreviewUrl", "payload": api.image.preview_url(src_project.reference_image_url,
+                                                                                      100, 100)},
+        {"field": "data.finished", "payload": False}
     ]
     api.app.set_fields(task_id, fields)
 
@@ -55,7 +56,7 @@ def _set_progress(api, task_id, message, current, total):
         {"field": "data.totalProgressLabel", "payload": total},
         {"field": "data.currentProgress", "payload": current},
         {"field": "data.totalProgress", "payload": total},
-        {"field": "data.finished", "payload": "false"}
+        {"field": "data.finished", "payload": False}
     ]
     api.app.set_fields(task_id, fields)
 
