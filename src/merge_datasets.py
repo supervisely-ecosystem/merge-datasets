@@ -67,6 +67,8 @@ def merge_projects(api: sly.Api, task_id, context, state, app_logger):
         except Exception as e:
             app_logger.error("Source Project Meta is conflicting with Destination Project Meta. "
                              "Please, check that geometry of classes is the same in both projects.")
+            app.show_modal_window("Error during merge, values are different. Source Project Meta is conflicting with Destination Project Meta. "
+                             "Please, check that geometry of classes and tags are the same in both projects. Please stop and re-run application manually.", level="error")
             raise e
 
         dst_dataset = None
@@ -75,8 +77,9 @@ def merge_projects(api: sly.Api, task_id, context, state, app_logger):
             app_logger.info(f"Destination Dataset: name'{dst_dataset.name}', id:'{dst_dataset.id}'.")
         elif state["dstDatasetMode"] == "newDataset":
             if api.dataset.exists(dst_project.id, dst_dataset_name):
+                existing_datasets = [dataset_info.name for dataset_info in api.dataset.get_list(dst_project.id)]
                 old_dst_dataset_name = dst_dataset_name
-                dst_dataset_name = api.dataset.get_free_name(dst_project.id, dst_dataset_name)
+                dst_dataset_name = generate_free_name(existing_datasets, dst_dataset_name)
                 app_logger.info(
                     f"Dataset with the given name '{old_dst_dataset_name}' already exists. Dataset: '{dst_dataset_name}' will be created.")
 
@@ -85,8 +88,9 @@ def merge_projects(api: sly.Api, task_id, context, state, app_logger):
 
     elif state["dstProjectMode"] == "newProject":
         if api.project.exists(WORKSPACE_ID, dst_project_name):
+            existing_projects = [project_info.name for project_info in api.project.get_list(WORKSPACE_ID)]
             old_dst_project_name = dst_project_name
-            dst_project_name = api.project.get_free_name(WORKSPACE_ID, dst_project_name)
+            dst_project_name = generate_free_name(existing_projects, dst_project_name)
             app_logger.info(
                 f"Project with the given name '{old_dst_project_name}' already exists. Project: `{dst_project_name}` will be created.")
 
@@ -120,11 +124,14 @@ def merge_projects(api: sly.Api, task_id, context, state, app_logger):
             existing_items.append(video.name)
 
     cur_item_count = 0
+    progress = sly.Progress("Merging", total_items)
     for dataset_name in state["selectedDatasets"]:
         dataset = src_datasets_by_name[dataset_name.lstrip('/')]
+
         if src_project.type == str(sly.ProjectType.IMAGES):
             images = api.image.get_list(dataset.id)
             app_logger.info(f"Merging images and annotations from '{dataset.name}' dataset")
+
             for batch in sly.batched(images):
                 ds_image_ids = [ds_image_info.id for ds_image_info in batch]
                 ds_image_names = [ds_image_info.name for ds_image_info in batch]
@@ -158,8 +165,8 @@ def merge_projects(api: sly.Api, task_id, context, state, app_logger):
                 api.annotation.upload_jsons(dst_image_ids, ann_jsons)
 
                 cur_item_count = cur_item_count + len(ds_image_ids)
-
                 ui.item_progress(api, task_id, "Items Merged", cur_item_count, total_items, "false")
+                progress.iters_done_report(len(ds_image_ids))
 
         elif src_project.type == str(sly.ProjectType.VIDEOS):
             videos = api.video.get_list(dataset.id)
@@ -183,6 +190,7 @@ def merge_projects(api: sly.Api, task_id, context, state, app_logger):
 
                     cur_item_count = cur_item_count + 1
                     ui.item_progress(api, task_id, "Items Merged", cur_item_count, total_items, "false")
+                    progress.iter_done_report()
 
     if state["nameConflicts"] == "ignore":
         app.show_modal_window(f"{len(state['selectedDatasets'])} datasets, from Project: '{src_project.name}' "
