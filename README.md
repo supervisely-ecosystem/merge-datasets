@@ -26,7 +26,7 @@ Application allows to merge selected datasets in Project. Currently working only
 
 **Step 1.** Add app to your team from [Ecosystem](https://ecosystem.supervise.ly/apps/merge-datasets) if it is not there.
 
-**Step 2**: Open context menu of project -> `Run App` -> `Merge datasets`
+**Step 2**: Open context menu of project -> `Run App` -> `Merge Datasets`
 
 <img src="https://i.imgur.com/6ecS2ec.png"  width="600px"/>
 
