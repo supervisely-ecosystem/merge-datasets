@@ -39,20 +39,19 @@ Application allows to merge selected datasets in Project. Currently working only
 
 **Step 1.** Configure merging settings in UI 
 
-<img src="https://i.imgur.com/nW2ZIP4.png" />
+<img src="https://i.imgur.com/CMTzN7f.png"/>
 
-**❶** Your source project
+**1.** Your source project
 
-**❷** Select datasets from source project that should be merged
+**2.** Select datasets from source project that should be merged
 
-**❸** Choose option for name conflicts
+**3.** Choose how to resolve name conflicts
 
-**❹** Select Destination Project
+**4.** Select Destination Project
 
-**❺** Select Destination Dataset
+**5.** Select Destination Dataset
 
-**❻** Press `Merge Datasets` button. The progress bar will appear below. 
-When application will finish merging process the modal window will appear informing you that selected datasets have been merged.
+**6.** Press `Merge Datasets` button. Notification window appears when merging process has finished. 
    
 <img src="https://i.imgur.com/Mk68jKn.png" width="600px"/>
 
