@@ -1,10 +1,9 @@
 <div id="merge-projects">
     <sly-style>
         #merge-projects .input-label .right-side .text-muted {
-            color: black;
+        color: black;
         }
     </sly-style>
-
 
     <sly-card class="mt10" title="1. Input Project">
         <sly-field title="" description="Input project">
@@ -15,9 +14,9 @@
     </sly-card>
 
     <sly-card class="mt10" title="2. Select the datasets that should be merged">
-       <div class="mt5">
-           <sly-file-viewer :list="state.srcDatasetList" v-model="state.selectedDatasets"/>
-       </div>
+        <div class="mt5">
+            <sly-file-viewer :list="state.srcDatasetList" v-model="state.selectedDatasets"/>
+        </div>
     </sly-card>
 
     <sly-card class="mt10"
@@ -127,7 +126,8 @@
             <i class="zmdi zmdi-play mr5"></i> Merge Datasets
         </el-button>
 
-        <div class="mt5" v-if="state.dstProjectMode === 'newProject' && state.dstProjectName.length === 0" style="color: red">
+        <div class="mt5" v-if="state.dstProjectMode === 'newProject' && state.dstProjectName.length === 0"
+             style="color: red">
             Please, define the name of a new Project
         </div>
 
@@ -135,11 +135,13 @@
             Please, select one of the existing Projects
         </div>
 
-        <div class="mt5" v-if="state.dstDatasetMode === 'newDataset' && state.dstDatasetName.length === 0" style="color: red">
+        <div class="mt5" v-if="state.dstDatasetMode === 'newDataset' && state.dstDatasetName.length === 0"
+             style="color: red">
             Please, define the name of a new Dataset
         </div>
 
-        <div class="mt5" v-if="state.dstDatasetMode === 'existingDataset' && !state.selectedDatasetName" style="color: red">
+        <div class="mt5" v-if="state.dstDatasetMode === 'existingDataset' && !state.selectedDatasetName"
+             style="color: red">
             Please, select one of the existing Datasets
         </div>
 
