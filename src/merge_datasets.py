@@ -89,6 +89,8 @@ def merge_projects(api: sly.Api, task_id, context, state, app_logger):
     elif state["dstProjectMode"] == "newProject":
         dst_project = api.project.create(WORKSPACE_ID, dst_project_name, type=src_project.type, change_name_if_conflict=True)
         api.project.update_meta(dst_project.id, src_meta.to_json())
+        dst_meta_json = api.project.get_meta(dst_project.id)
+        dst_meta = sly.ProjectMeta.from_json(dst_meta_json)
         dst_dataset = api.dataset.create(dst_project.id, dst_dataset_name)
         app_logger.info(f"Destination Project: name '{dst_project.name}', id:'{dst_project.id}' has been created.")
         app_logger.info(f"Destination Dataset: name '{dst_dataset.name}', id:'{dst_dataset.id}' has been created.")
@@ -140,7 +142,6 @@ def merge_projects(api: sly.Api, task_id, context, state, app_logger):
                 progress_items_cb(len(names))
 
         elif src_project.type == str(sly.ProjectType.VIDEOS):
-            dst_meta = src_meta
             key_id_map = KeyIdMap()
             videos = api.video.get_list(dataset.id)
             app_logger.info(f"Merging videos and annotations from '{dataset.name}' dataset")
