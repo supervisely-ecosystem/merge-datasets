@@ -7,19 +7,17 @@
 
 
     <sly-card class="mt10" title="1. Input Project">
-        <sly-field>
-                    <a slot="title" target="_blank"
-                       :href="`/projects/${data.projectId}/datasets`">{{data.srcProjectName}}</a>
-                    <sly-icon slot="icon" :options="{ imageUrl: `${data.srcProjectPreviewUrl}` }"/>
+        <sly-field title="" description="Input project">
+            <a slot="title" target="_blank"
+               :href="`/projects/${data.projectId}/datasets`">{{data.srcProjectName}}</a>
+            <sly-icon slot="icon" :options="{ imageUrl: `${data.srcProjectPreviewUrl}` }"/>
         </sly-field>
     </sly-card>
 
     <sly-card class="mt10" title="2. Select the datasets that should be merged">
-             <sly-field>
-                        <div class="mt5">
-                            <sly-file-viewer :list="state.srcDatasetList" v-model="state.selectedDatasets"/>
-                        </div>
-             </sly-field>
+       <div class="mt5">
+           <sly-file-viewer :list="state.srcDatasetList" v-model="state.selectedDatasets"/>
+       </div>
     </sly-card>
 
     <sly-card class="mt10"
@@ -124,8 +122,7 @@
                            (state.dstProjectMode === 'newProject' && state.dstProjectName.length === 0) ||
                            (state.dstProjectMode === 'existingProject' && !state.dstProjectId) ||
                            (state.dstDatasetMode === 'newDataset' && state.dstDatasetName.length === 0) ||
-                           (state.dstDatasetMode === 'existingDataset' && !state.selectedDatasetName) ||
-                           (data.finished === true)"
+                           (state.dstDatasetMode === 'existingDataset' && !state.selectedDatasetName)"
                 @click="data.processing = true; command('merge_projects')">
             <i class="zmdi zmdi-play mr5"></i> Merge Datasets
         </el-button>
@@ -150,13 +147,5 @@
             <div>{{data.progressName}}: {{data.currentProgressLabel}} / {{data.totalProgressLabel}}</div>
             <el-progress :percentage="Math.round(data.currentProgress * 100 / data.totalProgress)"></el-progress>
         </div>
-
-             <sly-field v-if="data.finished === true">
-                 <h3>
-                    <i class="zmdi zmdi-info"></i>
-                    Please stop application manually!
-                 </h3>
-             </sly-field>
-
     </sly-card>
 </div>
