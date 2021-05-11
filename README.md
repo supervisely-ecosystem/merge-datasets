@@ -58,3 +58,9 @@ Application allows to merge selected datasets in Project. Currently working only
 **Step 2.** Stop application manually.
 
 <img src="https://i.imgur.com/36yQ86G.png" />
+
+Watch short video for more details:
+
+<a data-key="sly-embeded-video-link" href="https://www.youtube.com/watch?v=n9L0DJNEjWc" data-video-code="20pDcGWxOYo">
+    <img src=https://i.imgur.com/zidH2NM.png" alt="SLY_EMBEDED_VIDEO_LINK"  style="max-width:500px;">
+</a>
