@@ -61,6 +61,6 @@ Application allows to merge selected datasets in Project. Currently working only
 
 Watch short video for more details:
 
-<a data-key="sly-embeded-video-link" href="https://www.youtube.com/watch?v=vfUjJXeWVY8" data-video-code="20pDcGWxOYo">
+<a data-key="sly-embeded-video-link" href="https://www.youtube.com/watch?v=vfUjJXeWVY8" data-video-code="vfUjJXeWVY8">
     <img src="https://i.imgur.com/LSBR9vG.png" alt="SLY_EMBEDED_VIDEO_LINK"  style="max-width:500px;">
 </a>
