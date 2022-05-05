@@ -12,7 +12,11 @@
   "icon": "https://i.imgur.com/DG3URUW.png",
   "icon_background": "#FFFFFF",
   "context_menu": {
-    "target": ["images_project", "videos_project"]
+    "target": [
+      "images_project",
+      "videos_project"
+    ]
   },
-  "instance_version": "6.4.14"
+  "instance_version": "6.4.14",
+  "poster": "https://i.imgur.com/QF7FTZn.png"
 }
