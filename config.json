@@ -2,7 +2,8 @@
   "name": "Merge datasets",
   "type": "app",
   "categories": [
-    "Data Management"
+    "images",
+    "project management"
   ],
   "description": "Merge selected datasets with images or videos into a single one",
   "docker_image": "supervisely/base-py-sdk:6.1.73",
