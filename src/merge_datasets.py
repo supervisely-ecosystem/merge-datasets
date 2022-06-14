@@ -1,10 +1,11 @@
 import os
-import supervisely_lib as sly
-from supervisely_lib._utils import generate_free_name
-from supervisely_lib.video_annotation.key_id_map import KeyIdMap
+import supervisely as sly
+from supervisely._utils import generate_free_name
+from supervisely.video_annotation.key_id_map import KeyIdMap
 import ui
+from supervisely.app.v1.app_service import AppService
 
-app: sly.AppService = sly.AppService()
+app: AppService = sly.AppService()
 
 TEAM_ID = int(os.environ['context.teamId'])
 WORKSPACE_ID = int(os.environ['context.workspaceId'])
