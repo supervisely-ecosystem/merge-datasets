@@ -150,7 +150,8 @@ def merge_projects(api: sly.Api, task_id, context, state, app_logger):
                     progress_items_cb(1)
                     continue
                 res_name = generate_free_name(existing_names, video_info.name, with_ext=True)
-                dst_video = api.video.upload_hash(dst_dataset.id, res_name, video_info.hash)
+                # dst_video = api.video.upload_hash(dst_dataset.id, res_name, video_info.hash)
+                dst_video = api.video.add_existing(dst_dataset.id, video_info, res_name)
                 ann_info = api.video.annotation.download(video_info.id)
                 ann = sly.VideoAnnotation.from_json(ann_info, dst_meta, key_id_map)
                 api.video.annotation.append(dst_video.id, ann)
