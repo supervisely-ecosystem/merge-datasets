@@ -27,18 +27,18 @@ Application allows to merge selected datasets in Project. Currently working only
 
 **Step 2**: Open context menu of project -> `Run App` -> `Merge Datasets`
 
-<img src="https://i.imgur.com/6ecS2ec.png"  width="600px"/>
+<img src="media/htr2.png"  width="600px"/>
 
 **Step 3**: Go to `Tasks` page and open application from there.
 
-<img src="https://i.imgur.com/U1kaHGb.png"/>
+<img src="media/htr3.png"/>
 
 # How To Use
 
 
 **Step 1.** Configure merging settings in UI 
 
-<img src="https://i.imgur.com/lnAcG3I.png"/>
+<img src="media/htu1.png"/>
 
 **1.** Your source project
 
@@ -52,14 +52,14 @@ Application allows to merge selected datasets in Project. Currently working only
 
 **6.** Press `Merge Datasets` button. Notification window appears when merging process has finished. 
    
-<img src="https://i.imgur.com/4hsY6y6.png" width="400px"/>
+<img src="media/htu1a.png" width="400px"/>
 
 **Step 2.** Stop application manually.
 
-<img src="https://i.imgur.com/36yQ86G.png" />
+<img src="media/htu2.png" />
 
 Watch short video for more details:
 
 <a data-key="sly-embeded-video-link" href="https://www.youtube.com/watch?v=vfUjJXeWVY8" data-video-code="vfUjJXeWVY8">
-    <img src="https://i.imgur.com/LSBR9vG.png" alt="SLY_EMBEDED_VIDEO_LINK"  style="max-width:500px;">
+    <img src="media/d.png" alt="SLY_EMBEDED_VIDEO_LINK"  style="max-width:500px;">
 </a>
