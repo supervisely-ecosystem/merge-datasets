@@ -12,7 +12,7 @@
   "main_script": "src/merge_datasets.py",
   "gui_template": "src/gui.html",
   "task_location": "workspace_tasks",
-  "icon": "https://i.imgur.com/DG3URUW.png",
+  "icon": "media/icon.png",
   "icon_background": "#FFFFFF",
   "context_menu": {
     "target": [
