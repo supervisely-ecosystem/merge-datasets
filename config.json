@@ -1,24 +1,24 @@
 {
-  "name": "Merge datasets",
-  "type": "app",
-  "categories": [
-    "images",
-    "project management",
-    "data operations"
-  ],
-  "description": "Merge selected datasets with images or videos into a single one",
-  "docker_image": "supervisely/base-py-sdk:6.72.55",
-  "instance_version": "6.4.57",
-  "main_script": "src/merge_datasets.py",
-  "gui_template": "src/gui.html",
-  "task_location": "workspace_tasks",
-  "icon": "https://i.imgur.com/DG3URUW.png",
-  "icon_background": "#FFFFFF",
-  "context_menu": {
-    "target": [
-      "images_project",
-      "videos_project"
-    ]
-  },
-  "poster": "https://user-images.githubusercontent.com/48245050/182392835-74ef1899-fde8-459a-a628-b5ab5ed35210.png"
+    "name": "Merge datasets",
+    "type": "app",
+    "categories": [
+        "images",
+        "project management",
+        "data operations"
+    ],
+    "description": "Merge selected datasets with images or videos into a single one",
+    "docker_image": "supervisely/data-operations:0.0.3",
+    "instance_version": "6.4.57",
+    "main_script": "src/merge_datasets.py",
+    "gui_template": "src/gui.html",
+    "task_location": "workspace_tasks",
+    "icon": "https://i.imgur.com/DG3URUW.png",
+    "icon_background": "#FFFFFF",
+    "context_menu": {
+        "target": [
+            "images_project",
+            "videos_project"
+        ]
+    },
+    "poster": "https://user-images.githubusercontent.com/48245050/182392835-74ef1899-fde8-459a-a628-b5ab5ed35210.png"
 }
