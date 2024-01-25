@@ -7,8 +7,8 @@
         "data operations"
     ],
     "description": "Merge selected datasets with images or videos into a single one",
-    "docker_image": "supervisely/data-operations:6.72.114",
-    "instance_version": "6.4.57",
+    "docker_image": "supervisely/data-operations:6.73.4",
+    "instance_version": "6.8.73",
     "main_script": "src/merge_datasets.py",
     "gui_template": "src/gui.html",
     "task_location": "workspace_tasks",
