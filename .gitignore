@@ -1,3 +1,6 @@
 secret_degub.env
 .idea
 src/merge_datasetsBACKUP.py
+.venv/
+.DS_Store
+__pycache__/
