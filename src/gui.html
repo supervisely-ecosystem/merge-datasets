@@ -1,153 +1,229 @@
 <div id="merge-projects">
-    <sly-style>
-        #merge-projects .input-label .right-side .text-muted {
-        color: black;
-        }
-    </sly-style>
+  <sly-style>
+    #merge-projects .input-label .right-side .text-muted { color: black; }
+  </sly-style>
 
-    <sly-card class="mt10" title="1. Input Project">
-        <sly-field title="" description="Input project">
-            <a slot="title" target="_blank"
-               :href="`/projects/${data.projectId}/datasets`">{{data.srcProjectName}}</a>
-            <sly-icon slot="icon" :options="{ imageUrl: `${data.srcProjectPreviewUrl}` }"/>
-        </sly-field>
-    </sly-card>
+  <sly-card class="mt10" title="1. Input Project">
+    <sly-field title="" description="Input project">
+      <a
+        slot="title"
+        target="_blank"
+        :href="`/projects/${data.projectId}/datasets`"
+        >{{data.srcProjectName}}</a
+      >
+      <sly-icon
+        slot="icon"
+        :options="{ imageUrl: `${data.srcProjectPreviewUrl}` }"
+      />
+    </sly-field>
+  </sly-card>
 
-    <sly-card class="mt10" title="2. Select the datasets that should be merged">
-        <div class="mt5">
-            <sly-file-viewer :list="state.srcDatasetList" v-model="state.selectedDatasets"/>
+  <sly-card class="mt10" title="2. Select the datasets that should be merged">
+    <div class="mt5">
+      <sly-file-viewer
+        :list="state.srcDatasetList"
+        v-model="state.selectedDatasets"
+      />
+    </div>
+  </sly-card>
+
+  <sly-card
+    class="mt10"
+    title="3. Merge Settings"
+    subtitle="Configure merging settings and destination"
+  >
+    <sly-field
+      title="How to solve name conflicts?"
+      description="Items within a single datasets have unique names. But items in different datasets can have the same names.
+                                Name conflicts arise when these datasets are merged."
+    >
+      <div
+        class="fflex"
+        style="flex-direction: column; align-items: flex-start"
+      >
+        <el-radio class="radio" v-model="state.nameConflicts" label="ignore">
+          Ignore item if destination dataset already has item with the same name
+        </el-radio>
+        <el-radio
+          class="radio mt5"
+          v-model="state.nameConflicts"
+          label="rename"
+          style="margin-left: 0"
+        >
+          Add item with the new auto-generated name
+        </el-radio>
+        <div class="mt5" style="color: #5a6772">
+          <i>Example: IMG_555.jpeg -> IMG_555_01.jpeg</i>
         </div>
-    </sly-card>
+        <el-radio
+          class="radio mt5"
+          v-model="state.nameConflicts"
+          label="dsrename"
+          style="margin-left: 0"
+        >
+          Add dataset name to the item name
+        </el-radio>
+        <div class="mt5" style="color: #5a6772">
+          <i>Example: IMG_555.jpeg -> Dataset1_IMG_555_01.jpeg</i>
+        </div>
+      </div>
+    </sly-field>
 
-    <sly-card class="mt10"
-              title="3. Merge Settings"
-              subtitle="Configure merging settings and destination">
-        <sly-field title="How to solve name conflicts?"
-                   description="Items within a single datasets have unique names. But items in different datasets can have the same names.
-                                Name conflicts arise when these datasets are merged.">
-            <div class="fflex" style="flex-direction: column; align-items: flex-start">
-                <el-radio class="radio"
-                          v-model="state.nameConflicts"
-                          label="ignore">
-                    Ignore item if destination dataset already has item with the same name
-                </el-radio>
-                <el-radio class="radio mt5"
-                          v-model="state.nameConflicts"
-                          label="rename"
-                          style="margin-left: 0;">
-                    Add item with the new auto-generated name
-                </el-radio>
-                <div class="mt5" style="color: #5a6772">
-                    <i>Example: IMG_555.jpeg -> IMG_555_01.jpeg</i>
-                </div>
-            </div>
-        </sly-field>
-
-        <sly-field title="Destination Project"
-                   description="Define destination project">
-            <div class="fflex">
-
-                <el-radio class="radio"
-                          v-model="state.dstProjectMode"
-                          label="newProject"
-                          @input="(val) => {
+    <sly-field
+      title="Destination Project"
+      description="Define destination project"
+    >
+      <div class="fflex">
+        <el-radio
+          class="radio"
+          v-model="state.dstProjectMode"
+          label="newProject"
+          @input="(val) => {
                             if (val === 'newProject') {
                                 state.dstDatasetMode = 'newDataset';
                             }
                           }"
-                >
-                    Create new Project
-                </el-radio>
+        >
+          Create new Project
+        </el-radio>
 
-                <el-radio class="radio" v-model="state.dstProjectMode" label="existingProject">Add to existing Project
-                </el-radio>
-            </div>
+        <el-radio
+          class="radio"
+          v-model="state.dstProjectMode"
+          label="existingProject"
+          >Add to existing Project
+        </el-radio>
+      </div>
 
-            <div class="mt5">
-                <div v-if="state.dstProjectMode === 'newProject'">
-                    <el-input placeholder="Please input project name" v-model="state.dstProjectName"></el-input>
-                    <div class="mt5" style="color: #5a6772">
-                        <i>If Project with the same name already exists, a new name will be generated automatically</i>
-                    </div>
-                </div>
-                <div v-if="state.dstProjectMode === 'existingProject'">
-                    <sly-select-project
-                            :workspace-id="data.workspaceId"
-                            :project-id.sync="state.dstProjectId"
-                            :options="{showLabel: false, availableTypes: [data.srcProjectType]}">
-                    </sly-select-project>
-                </div>
-            </div>
-        </sly-field>
+      <div class="mt5">
+        <div v-if="state.dstProjectMode === 'newProject'">
+          <el-input
+            placeholder="Please input project name"
+            v-model="state.dstProjectName"
+          ></el-input>
+          <div class="mt5" style="color: #5a6772">
+            <i
+              >If Project with the same name already exists, a new name will be
+              generated automatically</i
+            >
+          </div>
+        </div>
+        <div v-if="state.dstProjectMode === 'existingProject'">
+          <sly-select-project
+            :workspace-id="data.workspaceId"
+            :project-id.sync="state.dstProjectId"
+            :options="{showLabel: false, availableTypes: [data.srcProjectType]}"
+          >
+          </sly-select-project>
+        </div>
+      </div>
+    </sly-field>
 
-        <sly-field title="Destination Dataset"
-                   description="Define destination dataset">
+    <sly-field
+      title="Destination Dataset"
+      description="Define destination dataset"
+    >
+      <div class="fflex">
+        <el-radio
+          class="radio"
+          v-model="state.dstDatasetMode"
+          label="newDataset"
+          >Create new Dataset</el-radio
+        >
+        <el-radio
+          class="radio"
+          v-model="state.dstDatasetMode"
+          label="existingDataset"
+          :disabled="state.dstProjectMode === 'newProject'"
+        >
+          Add to existing dataset
+        </el-radio>
+      </div>
 
-            <div class="fflex">
-                <el-radio class="radio" v-model="state.dstDatasetMode" label="newDataset">Create new Dataset</el-radio>
-                <el-radio class="radio"
-                          v-model="state.dstDatasetMode"
-                          label="existingDataset"
-                          :disabled="state.dstProjectMode === 'newProject'">
-                    Add to existing dataset
-                </el-radio>
-            </div>
+      <div class="mt5">
+        <div v-if="state.dstDatasetMode === 'newDataset'">
+          <el-input
+            placeholder="Please input dataset name"
+            v-model="state.dstDatasetName"
+          ></el-input>
+          <div class="mt5" style="color: #5a6772">
+            <i
+              >If dataset with the same name already exists, a new name will be
+              generated automatically</i
+            >
+          </div>
+        </div>
 
-            <div class="mt5">
-                <div v-if="state.dstDatasetMode === 'newDataset'">
-                    <el-input placeholder="Please input dataset name" v-model="state.dstDatasetName"></el-input>
-                    <div class="mt5" style="color: #5a6772">
-                        <i>If dataset with the same name already exists, a new name will be generated automatically</i>
-                    </div>
-                </div>
+        <div v-if="state.dstDatasetMode === 'existingDataset'">
+          <sly-select-dataset
+            :project-id="state.dstProjectId"
+            :datasets.sync="state.selectedDatasetName"
+            :options="{showLabel: false}"
+          >
+          </sly-select-dataset>
+        </div>
+      </div>
+    </sly-field>
 
-                <div v-if="state.dstDatasetMode === 'existingDataset'">
-                    <sly-select-dataset
-                            :project-id="state.dstProjectId"
-                            :datasets.sync="state.selectedDatasetName"
-                            :options="{showLabel: false}"
-                    >
-                    </sly-select-dataset>
-                </div>
-            </div>
-        </sly-field>
-
-
-        <el-button
-                class="regular mr10" type="primary"
-                style="align-self: flex-end;"
-                :loading="data.processing === true"
-                :disabled="(state.selectedDatasets.length === 0) ||
+    <el-button
+      class="regular mr10"
+      type="primary"
+      style="align-self: flex-end"
+      :loading="data.processing === true"
+      :disabled="(state.selectedDatasets.length === 0) ||
                            (state.dstProjectMode === 'newProject' && state.dstProjectName.length === 0) ||
                            (state.dstProjectMode === 'existingProject' && !state.dstProjectId) ||
                            (state.dstDatasetMode === 'newDataset' && state.dstDatasetName.length === 0) ||
                            (state.dstDatasetMode === 'existingDataset' && !state.selectedDatasetName)"
-                @click="data.processing = true; command('merge_projects')">
-            <i class="zmdi zmdi-play mr5"></i> Merge Datasets
-        </el-button>
+      @click="data.processing = true; command('merge_projects')"
+    >
+      <i class="zmdi zmdi-play mr5"></i> Merge Datasets
+    </el-button>
 
-        <div class="mt5" v-if="state.dstProjectMode === 'newProject' && state.dstProjectName.length === 0"
-             style="color: red">
-            Please, define the name of a new Project
-        </div>
+    <div
+      class="mt5"
+      v-if="state.dstProjectMode === 'newProject' && state.dstProjectName.length === 0"
+      style="color: red"
+    >
+      Please, define the name of a new Project
+    </div>
 
-        <div class="mt5" v-if="state.dstProjectMode === 'existingProject' && !state.dstProjectId" style="color: red">
-            Please, select one of the existing Projects
-        </div>
+    <div
+      class="mt5"
+      v-if="state.dstProjectMode === 'existingProject' && !state.dstProjectId"
+      style="color: red"
+    >
+      Please, select one of the existing Projects
+    </div>
 
-        <div class="mt5" v-if="state.dstDatasetMode === 'newDataset' && state.dstDatasetName.length === 0"
-             style="color: red">
-            Please, define the name of a new Dataset
-        </div>
+    <div
+      class="mt5"
+      v-if="state.dstDatasetMode === 'newDataset' && state.dstDatasetName.length === 0"
+      style="color: red"
+    >
+      Please, define the name of a new Dataset
+    </div>
 
-        <div class="mt5" v-if="state.dstDatasetMode === 'existingDataset' && !state.selectedDatasetName"
-             style="color: red">
-            Please, select one of the existing Datasets
-        </div>
+    <div
+      class="mt5"
+      v-if="state.dstDatasetMode === 'existingDataset' && !state.selectedDatasetName"
+      style="color: red"
+    >
+      Please, select one of the existing Datasets
+    </div>
 
-        <div class="mt10" v-if="data.progressName && data.finished === false" class="mt10">
-            <div>{{data.progressName}}: {{data.currentProgressLabel}} / {{data.totalProgressLabel}}</div>
-            <el-progress :percentage="Math.round(data.currentProgress * 100 / data.totalProgress)"></el-progress>
-        </div>
-    </sly-card>
+    <div
+      class="mt10"
+      v-if="data.progressName && data.finished === false"
+      class="mt10"
+    >
+      <div>
+        {{data.progressName}}: {{data.currentProgressLabel}} /
+        {{data.totalProgressLabel}}
+      </div>
+      <el-progress
+        :percentage="Math.round(data.currentProgress * 100 / data.totalProgress)"
+      ></el-progress>
+    </div>
+  </sly-card>
 </div>
