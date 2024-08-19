@@ -7,6 +7,7 @@ from supervisely.app.v1.app_service import AppService
 from supervisely.video_annotation.key_id_map import KeyIdMap
 
 import ui
+import workflow as w
 
 if sly.is_development:
     load_dotenv(os.path.expanduser("~/supervisely.env"))
@@ -63,6 +64,7 @@ def init_src_project(api: sly.Api, task_id, context, state, app_logger):
 @app.callback("merge_projects")
 @sly.timeit
 def merge_projects(api: sly.Api, task_id, context, state, app_logger):
+    w.workflow_input(api, src_project.id)
     dst_project_id = state["dstProjectId"]
     dst_project_name = state["dstProjectName"]
 
@@ -202,6 +204,8 @@ def merge_projects(api: sly.Api, task_id, context, state, app_logger):
                 api.video.annotation.append(dst_video.id, ann)
                 existing_names.append(res_name)
                 progress_items_cb(1)
+
+    w.workflow_output(api, dst_project.id)
 
     dialog_message = (
         f"{len(state['selectedDatasets'])} datasets from project '{src_project.name}' "
