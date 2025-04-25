@@ -176,7 +176,7 @@ def merge_projects(api: sly.Api, task_id, context, state, app_logger):
                 if len(ids) > 0:
                     dst_images = api.image.upload_ids(dst_dataset.id, names, ids)
                     dst_ids = [dst_info.id for dst_info in dst_images]
-                    api.annotation.upload_jsons(dst_ids, anns_jsons)
+                    api.annotation.upload_jsons(dst_ids, anns_jsons, skip_bounds_validation=True)
                 progress_items_cb(len(batch))
 
         elif src_project.type == str(sly.ProjectType.VIDEOS):
