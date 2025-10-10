@@ -9,7 +9,7 @@
 </p>
 
 
-[![](https://img.shields.io/badge/supervisely-ecosystem-brightgreen)](https://ecosystem.supervisely.com/apps/supervisely-ecosystem/merge-datasets)
+[![](https://img.shields.io/badge/supervisely-ecosystem-brightgreen)](../../../../supervisely-ecosystem/merge-datasets)
 [![](https://img.shields.io/badge/slack-chat-green.svg?logo=slack)](https://supervisely.com/slack)
 ![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/supervisely-ecosystem/merge-datasets)
 [![views](https://app.supervisely.com/img/badges/views/supervisely-ecosystem/merge-datasets.png)](https://supervisely.com)
@@ -23,7 +23,7 @@ Application allows to merge selected datasets in Project. Currently working only
 
 # How To Run
 
-**Step 1.** Add app to your team from [Ecosystem](https://ecosystem.supervisely.com/apps/merge-datasets) if it is not there.
+**Step 1.** Add app to your team from [Ecosystem](../../../../supervisely-ecosystem/merge-datasets) if it is not there.
 
 **Step 2**: Open context menu of project -> `Run App` -> `Merge Datasets`
 
