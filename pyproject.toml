@@ -1,0 +1,15 @@
+# Tool configuration only. Runtime dependencies live in dev_requirements.txt
+# (the platform's release CI forbids requirements.txt and builds images from dev_requirements.txt).
+
+[tool.ruff]
+line-length = 120
+target-version = "py314"  # runtime: supervisely/base-py-sdk-hardened (Python 3.14)
+src = ["."]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP", "BLE"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests/unit"]
+markers = ["contract: runs the app against a real Supervisely instance (opt-in, see tests/contract)"]
+filterwarnings = ["ignore::SyntaxWarning", "ignore::DeprecationWarning"]
