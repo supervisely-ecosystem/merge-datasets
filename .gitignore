@@ -1,6 +1,9 @@
-secret_degub.env
-.idea
-src/merge_datasetsBACKUP.py
-.venv/
+/secret_debug.env
 .DS_Store
+.idea
 __pycache__/
+*.pyc
+.venv
+debug
+.pytest_cache
+.ruff_cache
